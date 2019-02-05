@@ -1,15 +1,49 @@
 <?php
 
 /**
- * Get a the "Reviewed by:" text.
+ * Whether or not to automatically display post reviewers on a given post.
  *
  * @since   0.1.0
  *
  * @return  string|HTML
  */
-function maipr_get_post_reviewers_text() {
-	$text = apply_filters( 'maipr_post_reviewers_text', __( 'Reviewed by:', 'mai-post-reviewers' ) );
-	return $text . '&nbsp;';
+function maipr_display_post_reviewers() {
+
+	$display = true;
+
+	// Bail if not a single post or there are no reviewers.
+	if ( ! ( is_singular( 'post' ) && maipr_get_post_reviewer_terms() ) ) {
+		$display = false;
+	}
+
+	// Filter to disable auto display of post reviewers.
+	$display = apply_filters( 'maipr_display_post_reviewers', $display );
+
+	return $display;
+}
+
+/**
+ * Get the post reviewers HTML.
+ *
+ * @since   0.1.0
+ *
+ * @return  string|HTML
+ */
+function maipr_get_post_reviewers_html() {
+	$reviewers = maipr_get_post_reviewer_terms();
+	if ( ! $reviewers ) {
+		return '';
+	}
+	$content  = maipr_get_post_reviewer_images();
+	$content .= maipr_get_post_reviewer_text();
+	$content .= maipr_get_post_reviewer_names();
+	return genesis_markup( array(
+		'open'    => '<span %s>',
+		'close'   => '</span>',
+		'content' => $content,
+		'context' => 'post-reviewers',
+		'echo'    => false,
+	) );
 }
 
 /**
@@ -19,10 +53,14 @@ function maipr_get_post_reviewers_text() {
  *
  * @return  string|HTML
  */
-function maipr_get_post_reviewer_images( $terms ) {
+function maipr_get_post_reviewer_images() {
+	$reviewers = maipr_get_post_reviewer_terms();
+	if ( ! $reviewers ) {
+		return '';
+	}
 	// Images.
 	$html = '';
-	foreach ( $terms as $term ) {
+	foreach ( $reviewers as $term ) {
 		$image_id   = get_term_meta( $term->term_id, 'banner_id', true );
 		if ( $image_id ) {
 			$image = wp_get_attachment_image( $image_id, 'tiny' );
@@ -35,15 +73,36 @@ function maipr_get_post_reviewer_images( $terms ) {
 }
 
 /**
+ * Get a the "Reviewed by:" text.
+ *
+ * @since   0.1.0
+ *
+ * @return  string|HTML
+ */
+function maipr_get_post_reviewer_text() {
+	$reviewers = maipr_get_post_reviewer_terms();
+	if ( ! $reviewers ) {
+		return '';
+	}
+	// Filter to change the default 'Reviewed by:' text.
+	$text = apply_filters( 'maipr_post_reviewer_text', __( 'Reviewed by:', 'mai-post-reviewers' ) );
+	return sprintf( '<span class="reviewer-text">%s&nbsp;</span>', $text );
+}
+
+/**
  * Get a post's reviewer names.
  *
  * @since   0.1.0
  *
  * @return  string|HTML
  */
-function maipr_get_post_reviewer_names( $terms ) {
+function maipr_get_post_reviewer_names() {
+	$reviewers = maipr_get_post_reviewer_terms();
+	if ( ! $reviewers ) {
+		return '';
+	}
 	$html = '';
-	foreach ( $terms as $term ) {
+	foreach ( $reviewers as $term ) {
 		$html .= sprintf( '<a class="reviewer-name" href="%s">%s</a>,&nbsp;', get_term_link( $term, 'reviewer' ), $term->name );
 	}
 	return rtrim( $html, ',&nbsp;' );
@@ -85,4 +144,33 @@ function maipr_get_post_reviewer_terms() {
 
 	// Return them.
 	return $reviewers;
+}
+
+/**
+ * Get the stylesheet handle.
+ *
+ * @since   0.1.0
+ *
+ * @return  string
+ */
+function maipr_get_handle() {
+	if ( function_exists( 'mai_get_handle' ) ) {
+		return mai_get_handle();
+	}
+	return ( defined( 'CHILD_THEME_NAME' ) && CHILD_THEME_NAME ) ? sanitize_title_with_dashes( CHILD_THEME_NAME ) : 'child-theme';
+}
+
+/**
+ * Get script suffix.
+ *
+ * @since   0.1.0
+ *
+ * @return  string
+ */
+function maipr_get_suffix() {
+	if ( function_exists( 'mai_get_suffix' ) ) {
+		return mai_get_suffix();
+	}
+	$debug = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG;
+	return $debug ? '' : '.min';
 }
