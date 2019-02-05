@@ -4,7 +4,7 @@
 
 Add reviewers to posts. Includes shortcodes and helper functions to use with genesis_post_info.
 
-Registers a new taxonomy called "Reviewers" where you can choose one or more reviewers for a given post.
+Registers a new taxonomy called "Reviewers" where you can choose one or more reviewers for a given post. Each reviewer has an archive page showing posts they've reviewed.
 
 
 ## Display
@@ -15,6 +15,10 @@ Add/edit any post and check off any reviewers for that post and they will automa
 **Default Layout**
 
 ![alt text](/assets/images/default.png "Mai Post Reviewers default layout")
+
+**Default Layout with multiple reviewers**
+
+![alt text](/assets/images/multiple.png "Mai Post Reviewers multiple layout")
 
 **Custom Layout and styles (via genesis_post_info filter)**
 
