@@ -122,7 +122,7 @@ final class Mai_Post_Reviewers {
 	public function hooks() {
 
 		// Include vendor libraries.
-		// require_once __DIR__ . '/vendor/autoload.php';
+		require_once __DIR__ . '/vendor/autoload.php';
 
 		// add_action( 'admin_init', array( $this, 'updater' ) );
 		add_action( 'init', array( $this, 'register_content_types' ) );
@@ -151,7 +151,7 @@ final class Mai_Post_Reviewers {
 			return;
 		}
 		// Setup the updater.
-		// $updater = Puc_v4_Factory::buildUpdateChecker( 'https://github.com/maithemewp/mai-theme-engine/', __FILE__, 'mai-theme-engine' );
+		$updater = Puc_v4_Factory::buildUpdateChecker( 'https://github.com/maithemewp/mai-post-reviewers/', __FILE__, 'mai-post-reviewers' );
 	}
 
 	/**

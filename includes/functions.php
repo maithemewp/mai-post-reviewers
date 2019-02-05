@@ -63,13 +63,25 @@ function maipr_get_post_reviewer_images() {
 	foreach ( $reviewers as $term ) {
 		$image_id   = get_term_meta( $term->term_id, 'banner_id', true );
 		if ( $image_id ) {
-			$image = wp_get_attachment_image( $image_id, 'tiny' );
+			$image = wp_get_attachment_image( $image_id, maipr_get_post_reviewer_image_size() );
 			if ( $image ) {
 				$html .= sprintf( '<a class="reviewer-image" href="%s">%s</a>', get_term_link( $term, 'reviewer' ), $image );
 			}
 		}
 	}
 	return $html;
+}
+
+/**
+ * Get a the reviewer image size.
+ *
+ * @since   0.1.0
+ *
+ * @return  string|HTML
+ */
+function maipr_get_post_reviewer_image_size() {
+	// Filter the image size to use for post reviewer.
+	return apply_filters( 'maipr_post_reviewer_image_size', 'tiny' );
 }
 
 /**

@@ -1,6 +1,6 @@
 # Mai Post Reviewers
 
-*Requires Genesis and works best with Mai Theme*
+**Requires Genesis. Intended to use with [Mai Theme](https://maitheme.com/) but will mostly work without it.**
 
 Add reviewers to posts. Includes shortcodes and helper functions to use with genesis_post_info.
 
@@ -12,11 +12,11 @@ Setup your reviewers via Dashboard > Posts > Reviewers. Make sure to add a revie
 
 Add/edit any post and check off any reviewers for that post and they will automatically display on the post.
 
-*Default Layout*
+**Default Layout**
 
 ![alt text](/assets/images/default.png "Mai Post Reviewers default layout")
 
-*Custom Layout and styles (via genesis_post_info filter)*
+**Custom Layout and styles (via genesis_post_info filter)**
 
 ![alt text](/assets/images/custom.png "Mai Post Reviewers custom layout")
 
@@ -40,6 +40,16 @@ $display = apply_filters( 'maipr_display_post_reviewers', $display );
  * @return  string  The modified text.
  */
 $text = apply_filters( 'maipr_post_reviewer_text', __( 'Reviewed by:', 'mai-post-reviewers' ) );
+```
+```
+/**
+ * Filter the image size to use for post reviewer.
+ *
+ * @param   string  The image size.
+ *
+ * @return  string  The new image size.
+ */
+$size = apply_filters( 'maipr_post_reviewer_image_size', 'tiny' );
 ```
 
 ## Shortcodes

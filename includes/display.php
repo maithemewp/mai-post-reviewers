@@ -67,5 +67,5 @@ function maipr_do_reviewer_archive_image() {
 		return;
 	}
 
-	printf( '<p class="reviewer-image">%s</p>', wp_get_attachment_image( $image_id, 'tiny' ) );
+	printf( '<p class="reviewer-image">%s</p>', wp_get_attachment_image( $image_id, maipr_get_post_reviewer_image_size() ) );
 }
