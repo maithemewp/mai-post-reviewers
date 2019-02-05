@@ -124,8 +124,8 @@ final class Mai_Post_Reviewers {
 		// Include vendor libraries.
 		require_once __DIR__ . '/vendor/autoload.php';
 
-		// add_action( 'admin_init', array( $this, 'updater' ) );
-		add_action( 'init', array( $this, 'register_content_types' ) );
+		add_action( 'admin_init', array( $this, 'updater' ) );
+		add_action( 'init',       array( $this, 'register_content_types' ) );
 
 		// Includes.
 		foreach ( glob( MAI_POST_REVIEWERS_INCLUDES_DIR . '*.php' ) as $file ) { include $file; }
