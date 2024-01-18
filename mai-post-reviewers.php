@@ -4,7 +4,7 @@
  * Plugin Name:     Mai Post Reviewers
  * Plugin URI:      https://maitheme.com
  * Description:     Mark a post as "Reviewed by" one or more people.
- * Version:         0.1.0
+ * Version:         0.1.1
  *
  * Author:          Mike Hemberger
  * Author URI:      https://maitheme.com
@@ -91,7 +91,7 @@ final class Mai_Post_Reviewers {
 	private function setup_constants() {
 		// Plugin version.
 		if ( ! defined( 'MAI_POST_REVIEWERS_VERSION' ) ) {
-			define( 'MAI_POST_REVIEWERS_VERSION', '0.1.0' );
+			define( 'MAI_POST_REVIEWERS_VERSION', '0.1.1' );
 		}
 
 		// Plugin Folder Path.
