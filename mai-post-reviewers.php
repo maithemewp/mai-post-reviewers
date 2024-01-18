@@ -13,6 +13,9 @@
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) exit;
 
+// Must be at the top of the file.
+use YahnisElsts\PluginUpdateChecker\v5\PucFactory;
+
 /**
  * Main Mai_Post_Reviewers Class.
  *
@@ -86,7 +89,6 @@ final class Mai_Post_Reviewers {
 	 * @return  void
 	 */
 	private function setup_constants() {
-
 		// Plugin version.
 		if ( ! defined( 'MAI_POST_REVIEWERS_VERSION' ) ) {
 			define( 'MAI_POST_REVIEWERS_VERSION', '0.1.0' );
@@ -116,7 +118,6 @@ final class Mai_Post_Reviewers {
 		if ( ! defined( 'MAI_POST_REVIEWERS_BASENAME' ) ) {
 			define( 'MAI_POST_REVIEWERS_BASENAME', dirname( plugin_basename( __FILE__ ) ) );
 		}
-
 	}
 
 	public function hooks() {
@@ -124,8 +125,8 @@ final class Mai_Post_Reviewers {
 		// Include vendor libraries.
 		require_once __DIR__ . '/vendor/autoload.php';
 
-		add_action( 'admin_init', array( $this, 'updater' ) );
-		add_action( 'init',       array( $this, 'register_content_types' ) );
+		add_action( 'plugins_loaded', array( $this, 'updater' ) );
+		add_action( 'init',           array( $this, 'register_content_types' ) );
 
 		// Includes.
 		foreach ( glob( MAI_POST_REVIEWERS_INCLUDES_DIR . '*.php' ) as $file ) { include $file; }
@@ -137,21 +138,33 @@ final class Mai_Post_Reviewers {
 	/**
 	 * Setup the updater.
 	 *
-	 * @uses    https://github.com/YahnisElsts/plugin-update-checker/
+	 * @uses https://github.com/YahnisElsts/plugin-update-checker/
 	 *
 	 * @return  void
 	 */
 	public function updater() {
-		// Bail if current user cannot manage plugins.
-		if ( ! current_user_can( 'install_plugins' ) ) {
-			return;
-		}
 		// Bail if plugin updater is not loaded.
-		if ( ! class_exists( 'Puc_v4_Factory' ) ) {
+		if ( ! class_exists( 'YahnisElsts\PluginUpdateChecker\v5\PucFactory' ) ) {
 			return;
 		}
+
 		// Setup the updater.
-		$updater = Puc_v4_Factory::buildUpdateChecker( 'https://github.com/maithemewp/mai-post-reviewers/', __FILE__, 'mai-post-reviewers' );
+		$updater = PucFactory::buildUpdateChecker( 'https://github.com/maithemewp/mai-post-reviewers/', __FILE__, 'mai-post-reviewers' );
+
+		// Maybe set github api token.
+		if ( defined( 'MAI_GITHUB_API_TOKEN' ) ) {
+			$updater->setAuthentication( MAI_GITHUB_API_TOKEN );
+		}
+
+		// Add icons for Dashboard > Updates screen.
+		if ( function_exists( 'mai_get_updater_icons' ) && $icons = mai_get_updater_icons() ) {
+			$updater->addResultFilter(
+				function ( $info ) use ( $icons ) {
+					$info->icons = $icons;
+					return $info;
+				}
+			);
+		}
 	}
 
 	/**
