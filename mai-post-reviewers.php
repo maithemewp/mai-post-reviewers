@@ -5,6 +5,7 @@
  * Plugin URI:      https://maitheme.com
  * Description:     Mark a post as "Reviewed by" one or more people.
  * Version:         0.1.1
+ * Requires PHP:    8.1
  *
  * Author:          Mike Hemberger
  * Author URI:      https://maitheme.com
